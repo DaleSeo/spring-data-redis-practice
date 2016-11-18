@@ -25,7 +25,8 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter")
-    compile("org.springframework.boot:spring-boot-starter-redis")
-    testCompile("junit:junit")
+    compile "org.springframework.boot:spring-boot-starter",
+            "com.github.kstyrc:embedded-redis:0.6"
+    compile "org.springframework.boot:spring-boot-starter-redis"
+    testCompile "junit:junit"
 }
