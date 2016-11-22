@@ -8,17 +8,24 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 public class RestTemplateTest {
 
 	@Autowired
-	private RedisTemplate<String, Object> redisTemplate;
+	private StringRedisTemplate redisTemplate;
 
 	@Test
 	public void test() {
-		System.out.println("READY");
+		ValueOperations<String, String> valueOps = redisTemplate.opsForValue();
+		valueOps.set("key1", "val1");
+		String value = valueOps.get("key1");
+		assertThat(value).isEqualToIgnoringCase("val1");
 	}
 
 	@Configuration
@@ -33,8 +40,8 @@ public class RestTemplateTest {
 		}
 
 		@Bean
-		RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
-			RedisTemplate<String, Object> template = new RedisTemplate<>();
+		RedisTemplate<?, ?> redisTemplate(RedisConnectionFactory connectionFactory) {
+			RedisTemplate<?, ?> template = new RedisTemplate<>();
 			template.setConnectionFactory(connectionFactory);
 			return template;
 		}
